@@ -3,6 +3,7 @@ const request = require("supertest");
 const db = require("../db/connection");
 const app = require("../app");
 const testData = require("../db/data/test-data/index");
+const reviews = require("../db/data/test-data/reviews");
 
 beforeEach(() => {
   return seed(testData);
@@ -44,17 +45,18 @@ describe("GET /api/reviews", () => {
       .then((res) => {
         expect(res.body.reviews.length).toBe(13);
         expect(Array.isArray(res.body.reviews)).toBe(true);
-        expect(res.body.reviews[0]).toMatchObject({
-          title: expect.any(String),
-          designer: expect.any(String),
-          owner: expect.any(String),
-          review_img_url: expect.any(String),
-          review_body: expect.any(String),
-          category: expect.any(String),
-          created_at: expect.any(String),
-          votes: expect.any(Number),
-          review_id: expect.any(Number),
-          comment_count: expect.any(String),
+        res.body.reviews.forEach((review) => {
+          expect(review).toMatchObject({
+            title: expect.any(String),
+            designer: expect.any(String),
+            owner: expect.any(String),
+            review_img_url: expect.any(String),
+            category: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            review_id: expect.any(Number),
+            comment_count: expect.any(String),
+          });
         });
       });
   });
@@ -70,7 +72,7 @@ describe("GET /api/reviews", () => {
       });
   });
 
-  test("GET - 400 returns a 'path not found' error when invalid path", () => {
+  test("GET - 404 returns a 'path not found' error when invalid path", () => {
     return request(app)
       .get("/api/invalid-review-path")
       .expect(404)
