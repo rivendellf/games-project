@@ -12,19 +12,26 @@ afterAll(() => {
   return db.end();
 });
 
-describe("categories", () => {
+describe("GET /api/categories", () => {
   test("GET - 200 returns an array of categories", () => {
     return request(app)
       .get("/api/categories")
       .expect(200)
       .then((res) => {
-        console.log(res.body.categories, "res.body");
         expect(res.body.categories.length).toBe(4);
         expect(Array.isArray(res.body.categories)).toBe(true);
         expect(res.body.categories[0]).toMatchObject({
           slug: expect.any(String),
           description: expect.any(String),
         });
+      });
+  });
+  test("GET - 404 returns a 'path not found' error when invalid path", () => {
+    return request(app)
+      .get("/api/invalid-path")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("path not found!");
       });
   });
 });
