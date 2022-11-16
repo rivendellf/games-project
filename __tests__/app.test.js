@@ -88,7 +88,7 @@ describe("GET /api/reviews/:review_id", () => {
       .expect(200)
       .then((res) => {
         expect(typeof res.body).toBe("object");
-        expect(res.body.review).toEqual({
+        expect(res.body.review).toMatchObject({
           review_id: 2,
           title: expect.any(String),
           designer: expect.any(String),
