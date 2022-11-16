@@ -1,5 +1,8 @@
 const express = require("express");
 const { getAllCategories } = require("./controllers/categoriesController");
+const {
+  getCommentsByReviewId,
+} = require("./controllers/getCommentsByReviewIdController");
 const { getReviewById } = require("./controllers/getReviewByIdController");
 const { getAllReviews } = require("./controllers/getReviewsController");
 const app = express();
@@ -7,6 +10,7 @@ const app = express();
 app.get("/api/categories", getAllCategories);
 app.get("/api/reviews", getAllReviews);
 app.get("/api/reviews/:review_id", getReviewById);
+app.get("/api/reviews/:review_id/comments", getCommentsByReviewId);
 
 app.use((err, req, res, next) => {
   if (err.status && err.msg) {
