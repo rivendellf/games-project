@@ -1,11 +1,11 @@
 const db = require("../db/connection");
 
-exports.fetchCommentsByReviewId = (review_id, sort_by = "created_at") => {
+exports.fetchCommentsByReviewId = (review_id) => {
   return db
     .query(
       `SELECT * FROM comments
         WHERE review_id = $1
-        ORDER BY ${sort_by} ASC`,
+        ORDER BY created_at ASC`,
       [review_id]
     )
     .then((res) => {

@@ -136,25 +136,26 @@ describe("GET /api/reviews/:review_id/comments", () => {
             created_at: expect.any(String),
             author: expect.any(String),
             body: expect.any(String),
-            review_id: expect.any(Number),
+            review_id: 2,
           });
         });
       });
   });
-});
-test("GET - 400: invalid ID", () => {
-  return request(app)
-    .get("/api/reviews/nonsense/comments")
-    .expect(400)
-    .then((res) => {
-      expect(res.body.msg).toBe("bad request!");
-    });
-});
-test("GET - 404: non-existent review_id", () => {
-  return request(app)
-    .get("/api/reviews/999/comments")
-    .expect(404)
-    .then((res) => {
-      expect(res.body.msg).toBe("review ID not found!");
-    });
+
+  test("GET - 400: invalid ID", () => {
+    return request(app)
+      .get("/api/reviews/nonsense/comments")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("bad request!");
+      });
+  });
+  test("GET - 404: non-existent review_id", () => {
+    return request(app)
+      .get("/api/reviews/999/comments")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("review ID not found!");
+      });
+  });
 });
