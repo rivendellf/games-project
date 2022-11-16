@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-const data = require("../db/data/test-data/index");
 
 exports.selectAllReviews = (sort_by = "created_at") => {
   let queryStr = `SELECT reviews.*, COUNT(comments.review_id) AS comment_count

@@ -80,3 +80,41 @@ describe("GET /api/reviews", () => {
       });
   });
 });
+
+describe("GET /api/reviews/:review_id", () => {
+  test("GET - 200: responds with an object of review information", () => {
+    return request(app)
+      .get("/api/reviews/2")
+      .expect(200)
+      .then((res) => {
+        expect(typeof res.body).toBe("object");
+        expect(res.body.review).toEqual({
+          review_id: 2,
+          title: expect.any(String),
+          designer: expect.any(String),
+          owner: expect.any(String),
+          review_img_url: expect.any(String),
+          review_body: expect.any(String),
+          category: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+        });
+      });
+  });
+  test("GET - 400: invalid ID", () => {
+    return request(app)
+      .get("/api/reviews/nonsense")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("bad request!");
+      });
+  });
+  test("GET - 404: non existent ID", () => {
+    return request(app)
+      .get("/api/reviews/999")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("path not found!");
+      });
+  });
+});
