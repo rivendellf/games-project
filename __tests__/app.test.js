@@ -142,7 +142,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
       });
   });
 
-  test("GET - 400: invalid ID", () => {
+  test("GET - 400: invalid ID returns bad request", () => {
     return request(app)
       .get("/api/reviews/nonsense/comments")
       .expect(400)
@@ -153,6 +153,118 @@ describe("GET /api/reviews/:review_id/comments", () => {
   test("GET - 404: non-existent review_id", () => {
     return request(app)
       .get("/api/reviews/999/comments")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("review ID not found!");
+      });
+  });
+});
+
+describe("POST /api/reviews/:review_id/comments", () => {
+  test("POST - 201: returns the new comment", () => {
+    return request(app)
+      .post("/api/reviews/2/comments")
+      .send({ username: "philippaclaire9", comment: "what a lovely game!" })
+      .expect(201)
+      .then((res) => {
+        expect(res.body.comment).toMatchObject({
+          body: "what a lovely game!",
+          author: "philippaclaire9",
+          votes: 0,
+          review_id: 2,
+          created_at: expect.any(String),
+          comment_id: expect.any(Number),
+        });
+      });
+  });
+  test("POST - 400: invalid review ID returns bad request", () => {
+    return request(app)
+      .post("/api/reviews/nonsense/comments")
+      .send({ username: "philippaclaire9", comment: "what a lovely game!" })
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("bad request!");
+      });
+  });
+  test("POST - 400: missing username or body returns bad request", () => {
+    return request(app)
+      .post("/api/reviews/2/comments")
+      .send({ username: "philippaclaire9" })
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("bad request!");
+      });
+  });
+  test("POST - 404: username doesn't exist", () => {
+    return request(app)
+      .post("/api/reviews/2/comments")
+      .send({ username: "aisha", comment: "what a lovely game!" })
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("resource not found!");
+      });
+  });
+  test("POST - 404: non-existent review_id", () => {
+    return request(app)
+      .post("/api/reviews/999/comments")
+      .send({ username: "philippaclaire9", comment: "what a lovely game!" })
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("resource not found!");
+      });
+  });
+});
+
+describe("PATCH /api/reviews/:review_id", () => {
+  test("PATCH - 200 should return updated review with increased votes", () => {
+    return request(app)
+      .patch("/api/reviews/2")
+      .send({ inc_votes: 10 })
+      .expect(200)
+      .then((res) => {
+        expect(res.body.review.votes).toBe(15);
+      });
+  });
+  test("PATCH - 200 should return updated review with decreased votes", () => {
+    return request(app)
+      .patch("/api/reviews/2")
+      .send({ inc_votes: -10 })
+      .expect(200)
+      .then((res) => {
+        expect(res.body.review.votes).toBe(-5);
+      });
+  });
+  test("PATCH - 200 should return unchanged vote count if nothing is sent", () => {
+    return request(app)
+      .patch("/api/reviews/2")
+      .send({})
+      .expect(200)
+      .then((res) => {
+        expect(res.body.review.votes).toBe(5);
+      });
+  });
+  test("PATCH - 400 invalid review_id", () => {
+    return request(app)
+      .patch("/api/reviews/nonsense")
+      .send({ inc_votes: 10 })
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("bad request!");
+      });
+  });
+  test("PATCH - 400 inc_votes is not a number", () => {
+    return request(app)
+      .patch("/api/reviews/2")
+      .send({ inc_votes: "ten" })
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("bad request!");
+      });
+  });
+  test("PATCH - 404 non-existent review_ID", () => {
+    return request(app)
+      .patch("/api/reviews/235")
+      .send({ inc_votes: 10 })
       .expect(404)
       .then((res) => {
         expect(res.body.msg).toBe("review ID not found!");
