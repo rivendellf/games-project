@@ -1,8 +1,6 @@
 const db = require("../db/connection");
-const { checkReviewIdExists } = require("../utils/utils.db");
 
 exports.insertCommentByReviewId = (body, review_id) => {
-
   const { username, comment } = body;
   const queryValues = [username, comment, review_id];
   const queryStr = `INSERT INTO comments (author, body, review_id)

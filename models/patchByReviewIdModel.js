@@ -1,13 +1,9 @@
 const db = require("../db/connection");
 
-exports.updateVotesByReviewId = (review_id, votes) => {
+exports.updateVotesByReviewId = (review_id, votes = 0) => {
   const queryStr = `UPDATE reviews SET votes = votes + $1 WHERE review_id = $2 RETURNING *;`;
 
-  let updatedVotes = votes;
-  if (votes === undefined) {
-    updatedVotes = 0;
-  }
-  const queryValues = [updatedVotes, review_id];
+  const queryValues = [votes, review_id];
 
   return db.query(queryStr, queryValues).then((res) => {
     if (res.rows.length === 0) {

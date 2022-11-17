@@ -26,7 +26,7 @@ app.patch("/api/reviews/:review_id", patchVotesByReviewId);
 
 app.use((err, req, res, next) => {
   if (err.code === "23503") {
-    res.status(404).send({ msg: "username/ID doesn't exist!" });
+    res.status(404).send({ msg: "resource not found!" });
   } else next(err);
 });
 

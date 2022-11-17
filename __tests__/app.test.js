@@ -201,7 +201,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send({ username: "aisha", comment: "what a lovely game!" })
       .expect(404)
       .then((res) => {
-        expect(res.body.msg).toBe("username/ID doesn't exist!");
+        expect(res.body.msg).toBe("resource not found!");
       });
   });
   test("POST - 404: non-existent review_id", () => {
@@ -210,7 +210,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send({ username: "philippaclaire9", comment: "what a lovely game!" })
       .expect(404)
       .then((res) => {
-        expect(res.body.msg).toBe("username/ID doesn't exist!");
+        expect(res.body.msg).toBe("resource not found!");
       });
   });
 });
