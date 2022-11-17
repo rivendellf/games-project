@@ -82,7 +82,7 @@ describe("GET /api/reviews", () => {
 });
 
 describe("GET /api/reviews/:review_id", () => {
-  test("GET - 200: responds with an object of review information", () => {
+  test("GET - 200: responds with an object of review information, adding a comment count property", () => {
     return request(app)
       .get("/api/reviews/2")
       .expect(200)
@@ -98,6 +98,7 @@ describe("GET /api/reviews/:review_id", () => {
           category: expect.any(String),
           created_at: expect.any(String),
           votes: expect.any(Number),
+          comment_count: expect.any(Number),
         });
       });
   });
