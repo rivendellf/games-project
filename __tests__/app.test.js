@@ -271,3 +271,29 @@ describe("PATCH /api/reviews/:review_id", () => {
       });
   });
 });
+
+describe("GET /api/users", () => {
+  test("GET - 200 returns an array of users", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.users.length).toBe(4);
+        expect(Array.isArray(res.body.users)).toBe(true);
+        expect(res.body.users[0]).toMatchObject({
+          username: expect.any(String),
+          name: expect.any(String),
+          avatar_url: expect.any(String),
+        });
+      });
+  });
+
+  test("GET - 404 returns a 'path not found' error when username does not exist", () => {
+    return request(app)
+      .get("/api/users/aisha")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("path not found!");
+      });
+  });
+});

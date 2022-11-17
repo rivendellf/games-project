@@ -1,10 +1,11 @@
 const express = require("express");
-const { getAllCategories } = require("./controllers/categoriesController");
+const { getAllCategories } = require("./controllers/getCategoriesController");
 const {
   getCommentsByReviewId,
 } = require("./controllers/getCommentsByReviewIdController");
 const { getReviewById } = require("./controllers/getReviewByIdController");
 const { getAllReviews } = require("./controllers/getReviewsController");
+const { getAllUsers } = require("./controllers/getUsersController");
 const {
   patchVotesByReviewId,
 } = require("./controllers/patchByReviewIdController");
@@ -19,6 +20,7 @@ app.get("/api/categories", getAllCategories);
 app.get("/api/reviews", getAllReviews);
 app.get("/api/reviews/:review_id", getReviewById);
 app.get("/api/reviews/:review_id/comments", getCommentsByReviewId);
+app.get("/api/users", getAllUsers);
 
 app.post("/api/reviews/:review_id/comments", postCommentByReviewId);
 
