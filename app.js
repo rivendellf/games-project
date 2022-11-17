@@ -6,6 +6,9 @@ const {
 const { getReviewById } = require("./controllers/getReviewByIdController");
 const { getAllReviews } = require("./controllers/getReviewsController");
 const {
+  patchVotesByReviewId,
+} = require("./controllers/patchByReviewIdController");
+const {
   postCommentByReviewId,
 } = require("./controllers/postCommentController");
 const app = express();
@@ -18,6 +21,8 @@ app.get("/api/reviews/:review_id", getReviewById);
 app.get("/api/reviews/:review_id/comments", getCommentsByReviewId);
 
 app.post("/api/reviews/:review_id/comments", postCommentByReviewId);
+
+app.patch("/api/reviews/:review_id", patchVotesByReviewId);
 
 app.use((err, req, res, next) => {
   if (err.status && err.msg) {
