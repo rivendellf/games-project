@@ -195,10 +195,76 @@ describe("POST /api/reviews/:review_id/comments", () => {
         expect(res.body.msg).toBe("bad request!");
       });
   });
+  test("POST - 404: username doesn't exist", () => {
+    return request(app)
+      .post("/api/reviews/2/comments")
+      .send({ username: "aisha", comment: "what a lovely game!" })
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("username/ID doesn't exist!");
+      });
+  });
   test("POST - 404: non-existent review_id", () => {
     return request(app)
       .post("/api/reviews/999/comments")
       .send({ username: "philippaclaire9", comment: "what a lovely game!" })
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("username/ID doesn't exist!");
+      });
+  });
+});
+
+describe("PATCH /api/reviews/:review_id", () => {
+  test("PATCH - 200 should return updated review with increased votes", () => {
+    return request(app)
+      .patch("/api/reviews/2")
+      .send({ inc_votes: 10 })
+      .expect(200)
+      .then((res) => {
+        expect(res.body.review.votes).toBe(15);
+      });
+  });
+  test("PATCH - 200 should return updated review with decreased votes", () => {
+    return request(app)
+      .patch("/api/reviews/2")
+      .send({ inc_votes: -10 })
+      .expect(200)
+      .then((res) => {
+        expect(res.body.review.votes).toBe(-5);
+      });
+  });
+  test("PATCH - 200 should return unchanged vote count if nothing is sent", () => {
+    return request(app)
+      .patch("/api/reviews/2")
+      .send({})
+      .expect(200)
+      .then((res) => {
+        expect(res.body.review.votes).toBe(5);
+      });
+  });
+  test("PATCH - 404 non-existent review_ID", () => {
+    return request(app)
+      .patch("/api/reviews/235")
+      .send({ inc_votes: 10 })
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("review ID not found!");
+      });
+  });
+  test("PATCH - 400 invalid review_id", () => {
+    return request(app)
+      .patch("/api/reviews/nonsense")
+      .send({ inc_votes: 10 })
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("bad request!");
+      });
+  });
+  test("PATCH - 404 non-existent review_ID", () => {
+    return request(app)
+      .patch("/api/reviews/235")
+      .send({ inc_votes: 10 })
       .expect(404)
       .then((res) => {
         expect(res.body.msg).toBe("review ID not found!");
