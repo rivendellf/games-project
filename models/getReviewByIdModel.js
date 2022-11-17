@@ -14,7 +14,6 @@ exports.fetchReviewById = (review_id) => {
       if (res.rows.length === 0) {
         return Promise.reject({ status: 404, msg: "path not found!" });
       }
-      console.log(res.rows, "res.rows");
       return res.rows[0];
     });
 };
