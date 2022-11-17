@@ -164,7 +164,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
   test("POST - 201: returns the new comment", () => {
     return request(app)
       .post("/api/reviews/2/comments")
-      .send({ username: "philippaclaire9", body: "what a lovely game!" })
+      .send({ username: "philippaclaire9", comment: "what a lovely game!" })
       .expect(201)
       .then((res) => {
         expect(res.body.comment).toMatchObject({
