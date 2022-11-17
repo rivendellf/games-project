@@ -243,19 +243,19 @@ describe("PATCH /api/reviews/:review_id", () => {
         expect(res.body.review.votes).toBe(5);
       });
   });
-  test("PATCH - 404 non-existent review_ID", () => {
-    return request(app)
-      .patch("/api/reviews/235")
-      .send({ inc_votes: 10 })
-      .expect(404)
-      .then((res) => {
-        expect(res.body.msg).toBe("review ID not found!");
-      });
-  });
   test("PATCH - 400 invalid review_id", () => {
     return request(app)
       .patch("/api/reviews/nonsense")
       .send({ inc_votes: 10 })
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("bad request!");
+      });
+  });
+  test("PATCH - 400 inc_votes is not a number", () => {
+    return request(app)
+      .patch("/api/reviews/2")
+      .send({ inc_votes: "ten" })
       .expect(400)
       .then((res) => {
         expect(res.body.msg).toBe("bad request!");
