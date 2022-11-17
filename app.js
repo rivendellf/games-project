@@ -5,12 +5,19 @@ const {
 } = require("./controllers/getCommentsByReviewIdController");
 const { getReviewById } = require("./controllers/getReviewByIdController");
 const { getAllReviews } = require("./controllers/getReviewsController");
+const {
+  postCommentByReviewId,
+} = require("./controllers/postCommentController");
 const app = express();
+
+app.use(express.json());
 
 app.get("/api/categories", getAllCategories);
 app.get("/api/reviews", getAllReviews);
 app.get("/api/reviews/:review_id", getReviewById);
 app.get("/api/reviews/:review_id/comments", getCommentsByReviewId);
+
+app.post("/api/reviews/:review_id/comments", postCommentByReviewId);
 
 app.use((err, req, res, next) => {
   if (err.status && err.msg) {

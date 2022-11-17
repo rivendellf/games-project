@@ -142,7 +142,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
       });
   });
 
-  test("GET - 400: invalid ID", () => {
+  test("GET - 400: invalid ID returns bad request", () => {
     return request(app)
       .get("/api/reviews/nonsense/comments")
       .expect(400)
@@ -153,6 +153,50 @@ describe("GET /api/reviews/:review_id/comments", () => {
   test("GET - 404: non-existent review_id", () => {
     return request(app)
       .get("/api/reviews/999/comments")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("review ID not found!");
+      });
+  });
+});
+
+describe("POST /api/reviews/:review_id/comments", () => {
+  test("POST - 201: returns the new comment", () => {
+    return request(app)
+      .post("/api/reviews/2/comments")
+      .send({ username: "philippaclaire9", body: "what a lovely game!" })
+      .expect(201)
+      .then((res) => {
+        expect(res.body.comment).toMatchObject({
+          body: "what a lovely game!",
+          author: "philippaclaire9",
+          votes: 0,
+          review_id: 2,
+          created_at: expect.any(String),
+          comment_id: expect.any(Number),
+        });
+      });
+  });
+  test("POST - 400: invalid review ID returns bad request", () => {
+    return request(app)
+      .post("/api/reviews/nonsense/comments")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("bad request!");
+      });
+  });
+  test("POST - 400: missing username or body returns bad request", () => {
+    return request(app)
+      .post("/api/reviews/2/comments")
+      .send({ username: "philippaclaire9" })
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("bad request!");
+      });
+  });
+  test("POST - 404: non-existent review_id", () => {
+    return request(app)
+      .post("/api/reviews/999/comments")
       .expect(404)
       .then((res) => {
         expect(res.body.msg).toBe("review ID not found!");
