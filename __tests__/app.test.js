@@ -71,6 +71,42 @@ describe("GET /api/reviews", () => {
       });
   });
 
+  test("GET - 200 returns reviews with the selected category", () => {
+    return request(app)
+      .get("/api/reviews?category=dexterity")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.reviews[0].category).toBe("dexterity");
+      });
+  });
+
+  test("GET - 200 test that results from a query are ordered as expected", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=category&order=ASC")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.reviews).toBeSortedBy("category", { ascending: true });
+      });
+  });
+
+  test("GET - 400 returns bad request error when invalid order query", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=category&order=random")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("bad request!");
+      });
+  });
+
+  test("GET - 400 returns bad request error when invalid sort_by query", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=colour")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("bad request!");
+      });
+  });
+
   test("GET - 404 returns a 'path not found' error when invalid path", () => {
     return request(app)
       .get("/api/invalid-review-path")
