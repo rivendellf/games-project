@@ -1,4 +1,7 @@
 const express = require("express");
+// const {
+//   deleteCommentByCommentId,
+// } = require("./controllers/deleteCommentController");
 const { getAllCategories } = require("./controllers/getCategoriesController");
 const {
   getCommentsByReviewId,
@@ -26,19 +29,24 @@ app.post("/api/reviews/:review_id/comments", postCommentByReviewId);
 
 app.patch("/api/reviews/:review_id", patchVotesByReviewId);
 
+//app.delete("/api/comments/:comment_id", deleteCommentByCommentId);
+
 app.use((err, req, res, next) => {
   if (err.code === "23503") {
     res.status(404).send({ msg: "resource not found!" });
+  }
+  if (err.code === "22P02") {
+    res.status(400).send({ msg: "bad request!" });
+  }
+  if (err.code === "23502") {
+    res.status(400).send({ msg: "missing value!" });
   } else next(err);
 });
 
 app.use((err, req, res, next) => {
   if (err.status && err.msg) {
     res.status(err.status).send({ msg: err.msg });
-  } else {
-    res.status(400).send({ msg: "bad request!" });
-  }
-  next(err);
+  } else next(err);
 });
 
 app.all("/*", (req, res, next) => {
