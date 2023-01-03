@@ -1,18 +1,29 @@
 # Northcoders House of Games API
 
-To access the project details and run it as intended, you will need to create two files in the root of the folder, titled:
+This project is the back-end of the games-project; creating endpoints for a website showing reviews for different board games. 
 
-.env.development
-.env.test
+Here is a link for the hosted version : https://weary-lingerie-clam.cyclic.app/
 
-These files need to contain references to the relevant databases as shown below:
+In order to run the project locally:
 
-To be inserted into .env.development :
+1. Clone this repository
 
-PGDATABASE=nc_games
+2. Run ```npm install``` to install all the dependencies 
 
-To be inserted into .env.test :
+3. You will need to create two files in the root of the folder, titled:
 
-PGDATABASE=nc_games_test
+```.env.development``` - in this file insert ```PGDATABASE=nc_games```
+
+```.env.test``` - in this file insert ```PGDATABASE=nc_games_test```
 
 This will allow you to connect to the databases locally. 
+
+4. Setup your database by running ```npm run setup-dbs``` and ```npm run seed```
+
+5. Test using ```npm test```
+
+Minimum requirements: 
+
+Node.js version 16.17.1 or above 
+
+Postgres version 8.7.3 or above
