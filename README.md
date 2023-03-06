@@ -2,7 +2,7 @@
 
 This project is the back-end of the games-project; creating endpoints for a website showing reviews for different board games. 
 
-Here is a link for the hosted version : https://weary-lingerie-clam.cyclic.app/
+Here is a link for the hosted version : https://weary-lingerie-clam.cyclic.app/api/users
 
 In order to run the project locally:
 
